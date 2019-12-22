@@ -36,9 +36,11 @@
      content: req.body.content
    });
 
-   post.save();
-   res.status(201).json({
-     message: "successfully added"
+   post.save().then(result => {
+    res.status(201).json({
+      message: "successfully added",
+      postId: createdPost._id
+      });
    });
  });
 
