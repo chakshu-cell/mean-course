@@ -1,24 +1,27 @@
- const express = require('express');
- const bodyParser = require("body-parser");
- const mongoose = require("mongoose");
+const path = require("path");
+const express = require("express");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
- const postsRoutes = require("./routes/posts");
+const postsRoutes = require("./routes/posts");
 
- const app = express();
+const app = express();
 
- mongoose.connect("mongodb+srv://chakshu_19:pi2okJsPRxCRAJEU@cluster0-mieew.mongodb.net/node-angularProject?retryWrites=true&w=majority",{ useNewUrlParser: true, useUnifiedTopology: true})
- .then(() => {
-   console.log("connected to database")
- })
- .catch(() => {
-   console.log("connection failed ")
- });
+mongoose.connect("mongodb+srv://chakshu_19:pi2okJsPRxCRAJEU@cluster0-mieew.mongodb.net/node-angularProject?retryWrites=true&w=majority",{ useNewUrlParser: true, useUnifiedTopology: true})
 
- app.use(bodyParser.json());
- app.use(bodyParser.urlencoded({extended: false}));
+  .then(() => {
+    console.log("Connected to database!");
+  })
+  .catch(() => {
+    console.log("Connection failed!");
+  });
 
- app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin","*");
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use("/images", express.static(path.join("backend/images")));
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
@@ -28,8 +31,8 @@
     "GET, POST, PATCH, PUT, DELETE, OPTIONS"
   );
   next();
- });
+});
 
- app.use("/api/posts", postsRoutes);
+app.use("/api/posts", postsRoutes);
 
- module.exports = app;
+module.exports = app;
